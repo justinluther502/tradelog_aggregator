@@ -1,17 +1,16 @@
 use glob::glob;
-// use std::env;
+use std::env;
 use std::{error::Error, str::FromStr};
 use csv::{Reader, StringRecord, Writer};
 use chrono;
 
 fn main() {
-    // let mut searchstr = env::current_dir()
-    //     .unwrap()
-    //     .into_os_string()
-    //     .into_string()
-    //     .unwrap();
-    // searchstr.push_str("/*.csv");
-    let searchstr = "C:\\Users\\justi\\Documents\\LWM\\7. Trade Logs/*.csv";
+    let mut searchstr = env::current_dir()
+        .unwrap()
+        .into_os_string()
+        .into_string()
+        .unwrap();
+    searchstr.push_str("/*.csv");
     let file_list = list_csvs(&searchstr);
     let rows = read_all_csvs(file_list);
     write_combined_csv(rows).unwrap();
