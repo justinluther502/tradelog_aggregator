@@ -11,7 +11,6 @@ fn main() {
     searchstr.push_str("/*.csv");
     let file_list = list_csvs(&searchstr);
     let rows = read_all_csvs(file_list);
-    println!("{:?}", rows);
     write_combined_csv(rows);
 }
 
