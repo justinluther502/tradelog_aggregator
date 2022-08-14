@@ -1,4 +1,4 @@
-# Project Title
+# RIA Trade Log Aggregator
 
 ## Table of Contents
 
