@@ -1,8 +1,8 @@
+use chrono;
+use csv::{Reader, StringRecord, Writer};
 use glob::glob;
 use std::env;
 use std::{error::Error, str::FromStr};
-use csv::{Reader, StringRecord, Writer};
-use chrono;
 
 fn main() {
     let mut searchstr = env::current_dir()
@@ -47,7 +47,7 @@ fn read_all_csvs(files: Vec<String>) -> Vec<StringRecord> {
         let mut new_rows = read_file(&file);
         rows.append(&mut new_rows);
     }
-    rows    
+    rows
 }
 
 fn write_combined_csv(rows: Vec<StringRecord>) -> Result<(), Box<dyn Error>> {
