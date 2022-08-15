@@ -5,19 +5,16 @@ use std::env;
 use std::{error::Error, path::PathBuf, str::FromStr};
 
 fn main() {
-    let mut searchstr = env::current_dir()
-        .unwrap()
-        .into_os_string()
-        .into_string()
-        .unwrap();
-    searchstr.push_str("/*.csv");
-    let file_list = list_csvs(&searchstr);
+    let mut searchpath = env::current_dir().unwrap();
+    searchpath.push("*.csv");
+    let file_list = list_csvs(searchpath);
     let rows = read_all_csvs(file_list);
     write_combined_csv(rows).unwrap();
 }
 
-fn list_csvs(searchstr: &str) -> Vec<PathBuf> {
+fn list_csvs(searchpath: PathBuf) -> Vec<PathBuf> {
     let mut csv_list = Vec::new();
+    let searchstr = searchpath.to_str().unwrap();
     for entry in glob(searchstr).expect("Failed to read glob pattern") {
         match entry {
             Ok(path) => csv_list.push(path),
