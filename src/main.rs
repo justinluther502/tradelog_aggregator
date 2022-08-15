@@ -2,7 +2,7 @@ use chrono;
 use csv::{Reader, StringRecord, Writer};
 use glob::glob;
 use std::env;
-use std::{error::Error, str::FromStr};
+use std::{error::Error, path::PathBuf, str::FromStr};
 
 fn main() {
     let mut searchstr = env::current_dir()
@@ -16,18 +16,18 @@ fn main() {
     write_combined_csv(rows).unwrap();
 }
 
-fn list_csvs(searchstr: &str) -> Vec<String> {
+fn list_csvs(searchstr: &str) -> Vec<PathBuf> {
     let mut csv_list = Vec::new();
     for entry in glob(searchstr).expect("Failed to read glob pattern") {
         match entry {
-            Ok(path) => csv_list.push(path.into_os_string().into_string().unwrap()),
+            Ok(path) => csv_list.push(path),
             Err(e) => println!("{:?}", e),
         }
     }
     csv_list
 }
 
-fn read_file(filepath: &str) -> Vec<StringRecord> {
+fn read_file(filepath: PathBuf) -> Vec<StringRecord> {
     let mut rdr = Reader::from_path(filepath).unwrap();
     let mut rows = Vec::new();
     for record in rdr.records() {
@@ -37,14 +37,14 @@ fn read_file(filepath: &str) -> Vec<StringRecord> {
     rows
 }
 
-fn read_all_csvs(files: Vec<String>) -> Vec<StringRecord> {
+fn read_all_csvs(files: Vec<PathBuf>) -> Vec<StringRecord> {
     let mut rows = Vec::new();
     let mut rdr = Reader::from_path(&files[0]).unwrap();
     let headers = rdr.headers().unwrap().to_owned();
     rows.push(headers);
 
     for file in files {
-        let mut new_rows = read_file(&file);
+        let mut new_rows = read_file(file);
         rows.append(&mut new_rows);
     }
     rows
